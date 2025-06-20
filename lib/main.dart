@@ -1,23 +1,27 @@
+import 'package:drawing_app_artify/features/draw/presentation/drawscreen.dart';
+import 'package:drawing_app_artify/features/home/presentation/homescreen.dart';
+import 'package:drawing_app_artify/features/splash/presentation/splashscreen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        useMaterial3: false
-      ),
-      home:Scaffold(body: Center(child: Text("Welcome to flutter Guys"),),)
+      title: 'Paint Your Dreams',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: false),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const SplashScreen(),
+        '/home': (context) => const HomeScreen(),
+        '/draw': (context) => const DrawScreen(),
+      },
     );
   }
 }
-
