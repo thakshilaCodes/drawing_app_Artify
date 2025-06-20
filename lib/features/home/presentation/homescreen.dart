@@ -5,6 +5,16 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(title: const Text('My Drawings'), centerTitle: true),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/draw');
+          },
+          child: const Text('Create New Drawing'),
+        ),
+      ),
+    );
   }
 }
