@@ -29,6 +29,24 @@ class _DrawScreenState extends State<DrawScreen> {
                 _currentPoints.add(details.localPosition);
               });
             },
+            onPanUpdate: (details) {
+              setState(() {
+                _currentPoints.add(details.localPosition);
+              });
+            },
+            onPanEnd: (details) {
+              setState(() {
+                _strokes.add(
+                  Stroke(
+                    points: List.from(_currentPoints),
+                    color: _selectedColor,
+                    brushSize: _brushSize,
+                  ),
+                );
+                _currentPoints = [];
+                _redoStrokes = [];
+              });
+            },
           ),
         ],
       ),
