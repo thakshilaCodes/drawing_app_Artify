@@ -4,7 +4,7 @@ import 'package:drawing_app_artify/features/splash/presentation/splashscreen.dar
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MyApp(key: ValueKey('MyApp')));
 }
 
 class MyApp extends StatelessWidget {
@@ -18,9 +18,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: false),
       initialRoute: '/',
       routes: {
-        '/': (context) => const SplashScreen(),
-        '/home': (context) => const HomeScreen(),
-        '/draw': (context) => const DrawScreen(),
+        '/': (context) => const SplashScreen(key: ValueKey('splashScreen')),
+        '/home': (context) => const HomeScreen(key: ValueKey('homeScreen')),
+        '/draw': (context) => const DrawScreen(key: ValueKey('drawScreen')),
       },
     );
   }
