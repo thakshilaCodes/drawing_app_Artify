@@ -2,6 +2,7 @@ import 'dart:core';
 
 import 'package:drawing_app_artify/features/draw/models/stroke.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 class DrawScreen extends StatefulWidget {
   const DrawScreen({super.key});
@@ -16,11 +17,98 @@ class _DrawScreenState extends State<DrawScreen> {
   List<Offset> _currentPoints = [];
   Color _selectedColor = Colors.black;
   double _brushSize = 4.0;
+  late Box<List<Stroke>> _drawingBox;
+
+  String? _drawingName;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeHive();
+    });
+    super.initState();
+  }
+
+  Future<void> _initializeHive() async {
+    _drawingBox = Hive.box('drawings');
+
+    final name = ModalRoute.of(context)?.settings.arguments as String?;
+    if (name != null) {
+      setState(() {
+        _drawingName = name;
+        _strokes = _drawingBox.get(name) ?? [];
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future<void> _saveDrawing(String name) async {
+    await _drawingBox.put(name, _strokes);
+
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Drawing $name saved Successfully')));
+  }
+
+  void _showSaveDialog() {
+    TextEditingController _controller = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Save Your Drawing'),
+          content: TextField(
+            controller: _controller,
+            decoration: InputDecoration(
+              labelText: 'Give a name to your drawing',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                final name = _controller.text.trim();
+
+                if (name.isNotEmpty) {
+                  setState(() {
+                    _drawingName = name;
+                  });
+                  _saveDrawing(name);
+                  Navigator.of(context).pop();
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Please enter a name before saving your drawing',
+                      ),
+                    ),
+                  );
+                }
+              },
+              child: Text('Save'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Draw Your Dreams'), centerTitle: true),
+      appBar: AppBar(
+        title: Text(_drawingName ?? 'Draw Your Dreams'),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -39,7 +127,7 @@ class _DrawScreenState extends State<DrawScreen> {
                 onPanEnd: (details) {
                   setState(() {
                     _strokes.add(
-                      Stroke(
+                      Stroke.fromOffsets(
                         points: List.from(_currentPoints),
                         color: _selectedColor,
                         brushSize: _brushSize,
@@ -60,15 +148,20 @@ class _DrawScreenState extends State<DrawScreen> {
                 ),
               ),
             ),
-            _buildToolBar(),
           ],
         ),
+      ),
+      bottomNavigationBar: SafeArea(child: _buildToolBar()),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showSaveDialog,
+        child: const Icon(Icons.save_as),
       ),
     );
   }
 
   Widget _buildToolBar() {
     return Container(
+      height: 56,
       color: Colors.grey[200],
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 2),
       child: Row(
@@ -165,14 +258,15 @@ class DrawPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     for (final stroke in strokes) {
       final paint = Paint()
-        ..color = stroke.color
+        ..color = stroke.strokeColor
         ..strokeCap = StrokeCap.round
         ..strokeWidth = stroke.brushSize;
 
-      for (int i = 0; i < stroke.points.length - 1; i++) {
-        if (stroke.points[i] != Offset.zero &&
-            stroke.points[i + 1] != Offset.zero) {
-          canvas.drawLine(stroke.points[i], stroke.points[i + 1], paint);
+      final points = stroke.offsetPoints;
+
+      for (int i = 0; i < points.length - 1; i++) {
+        if (points[i] != Offset.zero && points[i + 1] != Offset.zero) {
+          canvas.drawLine(points[i], points[i + 1], paint);
         }
       }
     }
