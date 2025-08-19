@@ -1,16 +1,35 @@
-# drawing_app_artify
+# 🎨 Artify - Drawing App
 
-A new Flutter project.
+Artify is a modern, intuitive drawing app built with **Flutter**, designed to help users unleash their creativity. Draw, save, duplicate, and share your artworks seamlessly.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 📹 Demo
 
-A few resources to get you started if this is your first Flutter project:
+Here’s a quick demo of Artify in action:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+![Artify Demo](demo_video/video_demo.gif)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+
+---
+
+## ✨ Features
+
+- Draw with smooth strokes and customizable brush options
+- Save, duplicate, and delete artworks
+- Share your drawings with others
+- Search through your creations easily
+- Intuitive UI with animations for a delightful experience
+- Quick access to all your artworks from the home gallery
+
+---
+
+## 🛠 Tech Stack
+
+- **Flutter** - UI framework for building cross-platform apps
+- **Hive** - Lightweight and fast key-value database for storing drawings
+- **Dart** - Programming language for Flutter
+
+---
+
