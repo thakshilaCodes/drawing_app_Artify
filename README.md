@@ -6,9 +6,13 @@ Artify is a modern, intuitive drawing app built with **Flutter**, designed to he
 
 ## 📹 Demo
 
-Here’s a quick demo of Artify in action:
+Experience Artify in action!
 
-![Artify Demo](demo_video/video_demo.gif)
+<p align="center">
+  <img src="demo_video/video_demo.gif" alt="Artify Demo" width="400" height="300"/>
+</p>
+
+*Click the GIF above to see how easy it is to draw, save, and manage your artworks.*
 
 
 
